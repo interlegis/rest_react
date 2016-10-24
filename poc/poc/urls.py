@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url, include
+from django.contrib import admin
 from rest_framework import routers
 from react_drf  import views
 
@@ -24,4 +25,5 @@ router.register(r'fornecedores', views.FornecedoresViewSet)
 urlpatterns = [
     url(r'^estoque_api/', include(router.urls)),
     url(r'^index/', include('react_drf.urls')),
+    url(r'^admin/', admin.site.urls),
 ]
