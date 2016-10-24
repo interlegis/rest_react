@@ -1,1 +1,1 @@
-# api_react
+# Django Rest Framework + ReactJs
