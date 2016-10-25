@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.views.generic import TemplateView
 from rest_framework import routers
 from react_drf  import views
 
@@ -24,6 +25,6 @@ router.register(r'fornecedores', views.FornecedoresViewSet)
 
 urlpatterns = [
     url(r'^estoque_api/', include(router.urls)),
-    url(r'^index/', include('react_drf.urls')),
+    url(r'^$', TemplateView.as_view(template_name='index.html')),
     url(r'^admin/', admin.site.urls),
 ]

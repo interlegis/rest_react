@@ -11,12 +11,3 @@ class ProdutosViewSet(viewsets.ModelViewSet):
 class FornecedoresViewSet(viewsets.ModelViewSet):
     queryset = Fornecedores.objects.all()
     serializer_class = FornecedoresSerializer
-
-def index(request):
-    return render(request, 'react_drf/index.html')
-
-def produtos(request):
-    return render(request, 'react_drf/produtos.html')
-
-def fornecedores(request):
-    return render(request, 'react_drf/fornecedores.html')
