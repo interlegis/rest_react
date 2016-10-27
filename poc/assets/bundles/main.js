@@ -50,7 +50,7 @@
 	var App = __webpack_require__(227);
 	var Login = __webpack_require__(231);
 	var auth = __webpack_require__(229);
-	var BK = __webpack_require__(232);
+	var Application = __webpack_require__(232);
 
 	function requireAuth(nextState, replace) {
 	    if (!auth.loggedIn()) {
@@ -66,7 +66,7 @@
 	    { history: Router.browserHistory },
 	    React.createElement(Router.Route, { path: '/index/login/', component: Login }),
 	    React.createElement(Router.Route, { path: '/index', component: App, onEnter: requireAuth }),
-	    React.createElement(Router.Route, { path: '/index/produtos', component: BK, onEnter: requireAuth })
+	    React.createElement(Router.Route, { path: '/index/produtos', component: Application, onEnter: requireAuth })
 	), document.getElementById('app'));
 
 /***/ },

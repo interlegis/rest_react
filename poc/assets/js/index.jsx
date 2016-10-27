@@ -4,7 +4,7 @@ var Router = require('react-router')
 var App = require('./app')
 var Login = require('./login')
 var auth = require('./auth')
-var BK = require('./bk.js')
+var Application = require('./application.js')
 
 function requireAuth(nextState, replace) {
     if (!auth.loggedIn()) {
@@ -19,7 +19,7 @@ ReactDOM.render(
     <Router.Router history={Router.browserHistory}>
         <Router.Route path='/index/login/' component={Login} />
         <Router.Route path='/index' component={App} onEnter={requireAuth} />
-        <Router.Route path='/index/produtos' component={BK} onEnter={requireAuth} />
+        <Router.Route path='/index/produtos' component={Application} onEnter={requireAuth} />
     </Router.Router>,
     document.getElementById('app')
 )
