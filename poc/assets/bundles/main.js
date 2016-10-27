@@ -36697,6 +36697,9 @@
 	                    authenticated: true,
 	                    token: res.token
 	                });
+	            },
+	            error: function (e) {
+	                $("#nome").toggleClass("hidden");
 	            }
 	        });
 	    }
@@ -36897,13 +36900,18 @@
 	    render: function () {
 	        return React.createElement(
 	            'div',
-	            { className: 'col-md-6' },
+	            { className: 'col-md-3' },
 	            React.createElement(
 	                'form',
 	                { onSubmit: this.handleSubmit, className: 'form-group' },
 	                React.createElement('input', { type: 'text', placeholder: 'Usuario', ref: 'username', className: 'form-control' }),
 	                React.createElement('input', { type: 'password', placeholder: 'Senha', ref: 'pass', className: 'form-control' }),
-	                React.createElement('input', { type: 'submit', className: 'btn btn-default' })
+	                React.createElement('input', { type: 'submit', className: 'btn btn-default' }),
+	                React.createElement(
+	                    'p',
+	                    { className: 'hidden', id: 'nome' },
+	                    'Erro Senha Invalida'
+	                )
 	            )
 	        );
 	    }
@@ -36941,8 +36949,9 @@
 	      headers: {
 	        'Authorization': "Token " + localStorage.token
 	      },
-	      success: function (data) {
-	        this.setState({ data: data });
+	      success: function (dataGET) {
+	        this.setState({ dataSearch: dataGET });
+	        this.setState({ data: dataGET });
 	      }.bind(this)
 	    });
 	  },
@@ -36962,7 +36971,7 @@
 	    var produtos = this.state.data;
 	    produto.id = Date.now();
 	    var newProdutos = produtos.concat([produto]);
-	    this.setState({ data: newProdutos });
+	    this.setState({ dataSearch: newProdutos });
 	    $.ajax({
 	      url: '/estoque_api/produtos/',
 	      dataType: 'json',
@@ -36971,21 +36980,22 @@
 	      headers: {
 	        'Authorization': "Token " + localStorage.token
 	      },
-	      success: function (data) {
-	        this.setState({ data: data });
+	      success: function (dataPOST) {
+	        this.loadProdutosFromServer();
 	      }.bind(this),
 	      error: function (xhr, status, err) {
 	        console.error(this.props.url, status, err.toString());
 	      }.bind(this)
 	    });
 	  },
-	  getInitialState: function () {
-	    return { data: [] };
+	  handleFilterData: function (data) {
+	    this.setState({ dataSearch: data });
 	  },
-
+	  getInitialState: function () {
+	    return { data: [], dataSearch: [] };
+	  },
 	  componentDidMount: function () {
 	    this.loadProdutosFromServer();
-	    setInterval(this.loadProdutosFromServer, 500);
 	  },
 	  render: function () {
 	    return React.createElement(
@@ -36997,8 +37007,32 @@
 	        'Lista de Produtos'
 	      ),
 	      React.createElement(AddProdutos, { onProdutoSubmit: this.handleProdutoSubmit }),
-	      React.createElement(Tabela, { data: this.state.data })
+	      React.createElement(FilterData, { onSearchSubmit: this.handleFilterData, data: this.state.data }),
+	      React.createElement(Tabela, { data: this.state.dataSearch })
 	    );
+	  }
+	});
+
+	var FilterData = React.createClass({
+	  displayName: 'FilterData',
+
+	  getRows: function (chave) {
+	    var filterData;
+	    if (!chave) {
+	      filterData = this.props.data;
+	    } else {
+	      var original_data = this.props.data;
+	      filterData = original_data.filter(function (filter) {
+	        return filter.nome.toString().toLowerCase().indexOf(chave.toString().toLowerCase()) !== -1 || filter.valor.toString().toLowerCase().indexOf(chave.toString().toLowerCase()) !== -1;;
+	      });
+	    }
+	    this.props.onSearchSubmit(filterData);
+	  },
+	  handleKeyChange: function (e) {
+	    this.getRows(this.refs.searchRef.value);
+	  },
+	  render: function () {
+	    return React.createElement('input', { className: 'form-control', type: 'text', placeholder: 'Search...', ref: 'searchRef', defaultValue: '', onChange: this.handleKeyChange });
 	  }
 	});
 
@@ -37009,7 +37043,7 @@
 	    var itensTabela = this.props.data.map(function (produto) {
 	      return React.createElement(
 	        LinhaTabela,
-	        { nome: produto.nome },
+	        { nome: produto.nome, key: produto.nome },
 	        produto.valor
 	      );
 	    });

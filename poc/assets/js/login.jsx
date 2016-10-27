@@ -23,11 +23,12 @@ module.exports = React.createClass({
 
     render: function() {
         return (
-          <div className="col-md-6">
+          <div className="col-md-3">
             <form onSubmit={this.handleSubmit} className="form-group">
                 <input type="text" placeholder="Usuario" ref="username" className="form-control"/>
                 <input type="password" placeholder="Senha" ref="pass" className="form-control"/>
                 <input type="submit" className="btn btn-default"/>
+                <p className="hidden" id="nome">Erro Senha Invalida</p>
             </form>
           </div>
         )

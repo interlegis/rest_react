@@ -48,6 +48,9 @@ module.exports = {
                     authenticated: true,
                     token: res.token
                 })
+            },
+            error: function(e) {
+              $("#nome").toggleClass("hidden");
             }
         })
     },

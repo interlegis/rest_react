@@ -23,8 +23,9 @@ module.exports = React.createClass({
             headers: {
                 'Authorization': "Token " + localStorage.token
             },
-            success: function(data) {
-                this.setState({data: data});
+            success: function(dataGET) {
+                this.setState({dataSearch: dataGET});
+                this.setState({data: dataGET});
             }.bind(this)
         })
     },
@@ -43,7 +44,7 @@ module.exports = React.createClass({
       var produtos = this.state.data;
       produto.id = Date.now();
       var newProdutos = produtos.concat([produto]);
-      this.setState({data: newProdutos});
+      this.setState({dataSearch: newProdutos});
       $.ajax({
         url: '/estoque_api/produtos/',
         dataType: 'json',
@@ -52,38 +53,63 @@ module.exports = React.createClass({
         headers: {
             'Authorization': "Token " + localStorage.token
         },
-        success: function(data) {
-          this.setState({data: data});
+        success: function(dataPOST) {
+          this.loadProdutosFromServer();
         }.bind(this),
         error: function(xhr, status, err) {
           console.error(this.props.url, status, err.toString());
         }.bind(this)
       });
     },
-    getInitialState: function() {
-        return {data: []};
+    handleFilterData: function (data) {
+      this.setState({dataSearch: data});
     },
-
+    getInitialState: function() {
+        return {data: [],dataSearch: []};
+    },
     componentDidMount: function() {
         this.loadProdutosFromServer();
-        setInterval(this.loadProdutosFromServer,500)
     },
     render: function() {
       return (
         <div className="col-md-12">
           <h1>Lista de Produtos</h1>
           <AddProdutos onProdutoSubmit={this.handleProdutoSubmit}/>
-          <Tabela data={this.state.data} />
+          <FilterData onSearchSubmit={this.handleFilterData} data={this.state.data}/>
+          <Tabela data={this.state.dataSearch} />
         </div>
+      );
+    }
+});
+
+var FilterData = React.createClass({
+    getRows: function(chave){
+      var filterData;
+      if (!chave) {
+        filterData = this.props.data;
+      }else{
+        var original_data = this.props.data;
+        filterData = original_data.filter(function (filter) {
+            return filter.nome.toString().toLowerCase().indexOf(chave.toString().toLowerCase()) !== -1 || filter.valor.toString().toLowerCase().indexOf(chave.toString().toLowerCase()) !== -1;;
+        });
+      }
+      this.props.onSearchSubmit(filterData);
+    },
+    handleKeyChange: function(e) {
+      this.getRows(this.refs.searchRef.value);
+    },
+    render: function() {
+      return (
+          <input className="form-control" type="text" placeholder="Search..." ref="searchRef" defaultValue="" onChange={this.handleKeyChange}/>
       );
     }
 });
 
   var Tabela = React.createClass({
     render: function() {
-      var itensTabela = this.props.data.map(function(produto) {
+      var itensTabela = this.props.data.map( function(produto) {
         return (
-          <LinhaTabela nome={produto.nome}>
+          <LinhaTabela nome={produto.nome} key={produto.nome}>
             {produto.valor}
           </LinhaTabela>
         );
