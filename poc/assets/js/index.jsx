@@ -4,7 +4,7 @@ var Router = require('react-router')
 var App = require('./app')
 var Login = require('./login')
 var auth = require('./auth')
-var Application = require('./application.js')
+var Application = require('./application.jsx')
 
 function requireAuth(nextState, replace) {
     if (!auth.loggedIn()) {
