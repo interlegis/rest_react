@@ -5,7 +5,7 @@ var Cookies = require('js-cookie')
 module.exports = React.createClass({
     loadProdutosFromServer: function(){
         function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
+          // these HTTP methods do not require CSRF protection
           return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
         }
         $.ajaxSetup({

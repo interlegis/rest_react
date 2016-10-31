@@ -36951,7 +36951,6 @@
 	      },
 	      success: function (dataGET) {
 	        this.setState({ dataSearch: dataGET });
-	        this.setState({ data: dataGET });
 	      }.bind(this)
 	    });
 	  },
@@ -37007,7 +37006,7 @@
 	        'Lista de Produtos'
 	      ),
 	      React.createElement(AddProdutos, { onProdutoSubmit: this.handleProdutoSubmit }),
-	      React.createElement(FilterData, { onSearchSubmit: this.handleFilterData, data: this.state.data }),
+	      React.createElement(FilterData, { onSearchSubmit: this.handleFilterData, data: this.state.dataSearch }),
 	      React.createElement(Tabela, { data: this.state.dataSearch })
 	    );
 	  }
