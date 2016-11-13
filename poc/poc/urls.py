@@ -26,12 +26,9 @@ router.register(r'produtos', views.ProdutosViewSet)
 router.register(r'fornecedores', views.FornecedoresViewSet)
 router.register(r'users', UserViewVSet)
 
-
-
-
 urlpatterns = [
     url(r'^estoque_api/', include(router.urls)),
-    url(r'^index/', TemplateView.as_view(template_name='index.html')),
+    url(r'^index', TemplateView.as_view(template_name='index.html')),
     url(r'^api-token-auth/',obtain_auth_token),
     url(r'^admin/', admin.site.urls),
 ]
