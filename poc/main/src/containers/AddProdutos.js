@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { RoleAwareComponent } from 'react-router-role-authorization';
+import Cookies from 'js-cookie';
 
-export default class AddProdutos extends Component{
+export default class AddProdutos extends RoleAwareComponent{
     constructor(props){
       super(props);
       this.state = {
@@ -8,6 +10,8 @@ export default class AddProdutos extends Component{
         valor: ''
       };
       this.handleSubmit = this.handleSubmit.bind(this);
+      this.allowedRoles = ['admin'];
+      this.userRoles = [Cookies.get('roles')];
     }
 
     handleSubmit(e) {
@@ -22,12 +26,14 @@ export default class AddProdutos extends Component{
     }
 
   render() {
-    return (
+    const AdicionaProdutos =  (
       <form className="form-group" onSubmit={this.handleSubmit}>
         <input className="form-control" type="text" placeholder="Nome" value={this.state.nome} onChange={ (event) => this.setState({nome: event.target.value})}/>
         <input className="form-control" type="number" placeholder="Valor" value={this.state.valor} onChange={(event) => this.setState({valor: event.target.value})}/>
         <input className="btn btn-default" type="submit" value="Enviar" />
       </form>
     );
+
+    return this.rolesMatched() ? AdicionaProdutos : null;
   }
 }

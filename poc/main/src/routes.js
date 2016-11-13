@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Router, IndexRoute } from 'react-router';
 import App from './components/app';
-import Produtos from './containers/produtos';
+import PageProdutos from './components/PageProduto';
 import Home from './components/home';
 import Login from './containers/login';
 import { loggedIn } from './containers/auth';
@@ -17,10 +17,10 @@ function requireAuth(nextState, replace) {
 }
 
 export default (
-    <Router path="index" component={App}>
+    <Route path="index" component={App}>
       <IndexRoute component={Home} onEnter={requireAuth} />
       <Route path="/login/" component={Login} />
-      <Route path="/produtos/" component={Produtos} onEnter={requireAuth} authorize={['2']} />
-      <Route path="/notfound/" component={NotFoundComponent}/>
-    </Router>
+      <Route authorize={['user','admin']} path="/produtos/" component={PageProdutos} onEnter={requireAuth} />
+      <Route path="/not-found" component={NotFoundComponent}/>
+    </Route>
 );

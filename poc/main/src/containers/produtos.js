@@ -4,31 +4,41 @@ import { getProdutos, postProduto } from '../actions/index';
 import Tabela from '../components/Tabela';
 import FilterData from './FilterData';
 import AddProdutos from './AddProdutos';
-import { AuthorizedComponent } from 'react-router-role-authorization';
 import Cookies from 'js-cookie';
 
-class Produtos extends AuthorizedComponent{
+class Produtos extends Component{
     constructor(props){
       super(props);
       this.state = {
-        produtos_filter: ''
-      };
-      this.userRoles = Cookies.get('user');
-      this.notAuthorizedPath = '/not-found';
+        dados: '',
+        renderData: ''
+      }
       this.onNewProdut = this.onNewProdut.bind(this);
     }
 
     componentWillMount() {
       this.props.getProdutos();
-      this.setState({ produtos_filter: this.props.produtos });
+    }
+
+    componentWillReceiveProps(nextProps){
+      this.setState({
+        dados: nextProps.produtos,
+        renderData: nextProps.produtos
+      });
     }
 
     onNewProdut(data){
       this.props.postProduto(data);
+      var produtos = this.props.produtos;
+      data.id = Date.now()
+      this.setState({
+        dados: produtos.concat([data]),
+        renderData: nextProps.produtos
+      });
     }
 
     render() {
-      if ((this.props.produtos ==  null) && (this.state.produtos_filter == null)) {
+      if (!this.state.dados) {
         return (
           <div className="col-md-12">
             Loading...
@@ -39,8 +49,8 @@ class Produtos extends AuthorizedComponent{
         <div className="col-md-12">
           <h1>Lista de Produtos</h1>
           <AddProdutos onProdutoSubmit={this.onNewProdut}/>
-          <FilterData onSearchSubmit={ (filterData) => this.setState({ produtos_filter: filterData})} data={this.props.produtos}/>
-          <Tabela data={this.state.produtos_filter} />
+          <FilterData onSearchSubmit={ (filteredData) => {this.setState({renderData: filteredData})} } data={this.state.dados}  />
+          <Tabela data={this.state.renderData} />
         </div>
       );
     }

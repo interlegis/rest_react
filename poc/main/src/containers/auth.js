@@ -64,8 +64,15 @@ export function login(username, pass, cb) {
                       'Authorization': "Token " + localStorage.token
                   },
                 success: function(res) {
-                Cookies.set('username',res.username);
-                Cookies.set('user',res.groups[0]);
+                  Cookies.set('username', res.username);
+                  switch (res.groups[0]) {
+                    case 1:
+                      Cookies.set('roles',"user");
+                    break;
+                    case 2:
+                      Cookies.set('roles', "admin");
+                    break;
+                  }
               }
               });
 
