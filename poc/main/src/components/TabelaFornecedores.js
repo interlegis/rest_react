@@ -16,7 +16,7 @@ export default class TabelaFornecedores extends Component{
       );
     });
     return(
-      <div className="col-md-10 col-md-offset-1">
+      <div className="col-md-4 col-md-offset-4">
           <h1>Lista de Fornecedores</h1>
           <table className="table-bordered table">
             <thead>

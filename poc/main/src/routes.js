@@ -22,7 +22,7 @@ export default (
       <IndexRoute component={Home} onEnter={requireAuth} />
       <Route path="/login/" component={Login} />
       <Route authorize={['user','admin']} path="/produtos/" component={PageProdutos} onEnter={requireAuth} />
-      <Route authorize={['fornecedor']} path="/fornecedores/" component={PageFornecedor} onEnter={requireAuth} />
+      <Route authorize={['fornecedor','admin']} path="/fornecedores/" component={PageFornecedor} onEnter={requireAuth} />
       <Route path="/not-found" component={NotFoundComponent}/>
     </Route>
 );

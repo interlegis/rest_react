@@ -33,7 +33,7 @@ class Produtos extends Component{
       data.id = Date.now()
       this.setState({
         dados: produtos.concat([data]),
-        renderData: nextProps.produtos
+        renderData: produtos.concat([data]),
       });
     }
 
@@ -47,7 +47,6 @@ class Produtos extends Component{
       }
       return (
         <div className="col-md-12">
-          <h1>Lista de Produtos</h1>
           <AddProdutos onProdutoSubmit={this.onNewProdut}/>
           <FilterData onSearchSubmit={ (filteredData) => {this.setState({renderData: filteredData})} } data={this.state.dados} type={"produtos"}/>
           <Tabela data={this.state.renderData} />

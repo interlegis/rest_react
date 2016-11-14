@@ -32,6 +32,7 @@ export default class FilterData extends Component{
     render() {
       return (
         <div className="col-md-4 col-md-offset-4">
+          <h3>Busca</h3>
           <input className="form-control" type="text" placeholder="Search..." ref="searchRef" defaultValue="" onChange={ (event) => this.getRows(event.target.value)}/>
         </div>
       );

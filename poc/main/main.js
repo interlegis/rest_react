@@ -71,11 +71,11 @@
 
 	var _routes2 = _interopRequireDefault(_routes);
 
-	var _reducers = __webpack_require__(300);
+	var _reducers = __webpack_require__(301);
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
-	var _reduxPromise = __webpack_require__(303);
+	var _reduxPromise = __webpack_require__(304);
 
 	var _reduxPromise2 = _interopRequireDefault(_reduxPromise);
 
@@ -28020,17 +28020,17 @@
 
 	var _PageFornecedor2 = _interopRequireDefault(_PageFornecedor);
 
-	var _home = __webpack_require__(296);
+	var _home = __webpack_require__(297);
 
 	var _home2 = _interopRequireDefault(_home);
 
-	var _login = __webpack_require__(298);
+	var _login = __webpack_require__(299);
 
 	var _login2 = _interopRequireDefault(_login);
 
-	var _auth = __webpack_require__(297);
+	var _auth = __webpack_require__(298);
 
-	var _notfound = __webpack_require__(299);
+	var _notfound = __webpack_require__(300);
 
 	var _notfound2 = _interopRequireDefault(_notfound);
 
@@ -28051,7 +28051,7 @@
 	    _react2.default.createElement(_reactRouter.IndexRoute, { component: _home2.default, onEnter: requireAuth }),
 	    _react2.default.createElement(_reactRouter.Route, { path: '/login/', component: _login2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { authorize: ['user', 'admin'], path: '/produtos/', component: _PageProduto2.default, onEnter: requireAuth }),
-	    _react2.default.createElement(_reactRouter.Route, { authorize: ['fornecedor'], path: '/fornecedores/', component: _PageFornecedor2.default, onEnter: requireAuth }),
+	    _react2.default.createElement(_reactRouter.Route, { authorize: ['fornecedor', 'admin'], path: '/fornecedores/', component: _PageFornecedor2.default, onEnter: requireAuth }),
 	    _react2.default.createElement(_reactRouter.Route, { path: '/not-found', component: _notfound2.default })
 	);
 
@@ -28294,7 +28294,7 @@
 	      data.id = Date.now();
 	      this.setState({
 	        dados: produtos.concat([data]),
-	        renderData: nextProps.produtos
+	        renderData: produtos.concat([data])
 	      });
 	    }
 	  }, {
@@ -28312,11 +28312,6 @@
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'col-md-12' },
-	        _react2.default.createElement(
-	          'h1',
-	          null,
-	          'Lista de Produtos'
-	        ),
 	        _react2.default.createElement(_AddProdutos2.default, { onProdutoSubmit: this.onNewProdut }),
 	        _react2.default.createElement(_FilterData2.default, { onSearchSubmit: function onSearchSubmit(filteredData) {
 	            _this2.setState({ renderData: filteredData });
@@ -28344,10 +28339,11 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.FORNECEDORES_GET = exports.PRODUTOS_POST = exports.PRODUTOS_GET = undefined;
+	exports.FORNECEDORES_POST = exports.FORNECEDORES_GET = exports.PRODUTOS_POST = exports.PRODUTOS_GET = undefined;
 	exports.getProdutos = getProdutos;
 	exports.postProduto = postProduto;
 	exports.getFornecedores = getFornecedores;
+	exports.postFornecedores = postFornecedores;
 
 	var _jquery = __webpack_require__(261);
 
@@ -28366,6 +28362,7 @@
 	var PRODUTOS_GET = exports.PRODUTOS_GET = 'PRODUTOS_GET';
 	var PRODUTOS_POST = exports.PRODUTOS_POST = 'PRODUTOS_POST';
 	var FORNECEDORES_GET = exports.FORNECEDORES_GET = 'FORNECEDORES_GET';
+	var FORNECEDORES_POST = exports.FORNECEDORES_POST = 'FORNECEDORES_POST';
 
 	var config = {
 	  headers: {
@@ -28390,10 +28387,18 @@
 	  };
 	}
 
-	function getFornecedores(props) {
+	function getFornecedores() {
 	  var request = _axios2.default.get('/estoque_api/fornecedores/', config);
 	  return {
 	    type: FORNECEDORES_GET,
+	    payload: request
+	  };
+	}
+
+	function postFornecedores(props) {
+	  var request = _axios2.default.post('/estoque_api/fornecedores/', props, config);
+	  return {
+	    type: FORNECEDORES_POST,
 	    payload: request
 	  };
 	}
@@ -40491,6 +40496,11 @@
 	      return _react2.default.createElement(
 	        "div",
 	        { className: "col-md-4 col-md-offset-4" },
+	        _react2.default.createElement(
+	          "h3",
+	          null,
+	          "Busca"
+	        ),
 	        _react2.default.createElement("input", { className: "form-control", type: "text", placeholder: "Search...", ref: "searchRef", defaultValue: "", onChange: function onChange(event) {
 	            return _this2.getRows(event.target.value);
 	          } })
@@ -40569,15 +40579,24 @@
 	      var _this2 = this;
 
 	      var AdicionaProdutos = _react2.default.createElement(
-	        'form',
-	        { className: 'form-group', onSubmit: this.handleSubmit },
-	        _react2.default.createElement('input', { className: 'form-control', type: 'text', placeholder: 'Nome', value: this.state.nome, onChange: function onChange(event) {
-	            return _this2.setState({ nome: event.target.value });
-	          } }),
-	        _react2.default.createElement('input', { className: 'form-control', type: 'number', placeholder: 'Valor', value: this.state.valor, onChange: function onChange(event) {
-	            return _this2.setState({ valor: event.target.value });
-	          } }),
-	        _react2.default.createElement('input', { className: 'btn btn-default', type: 'submit', value: 'Enviar' })
+	        'div',
+	        { className: 'col-md-4 col-md-offset-4' },
+	        _react2.default.createElement(
+	          'h3',
+	          null,
+	          'Adicionar Produtos'
+	        ),
+	        _react2.default.createElement(
+	          'form',
+	          { className: 'form-group', onSubmit: this.handleSubmit },
+	          _react2.default.createElement('input', { className: 'form-control', type: 'text', placeholder: 'Nome', value: this.state.nome, onChange: function onChange(event) {
+	              return _this2.setState({ nome: event.target.value });
+	            } }),
+	          _react2.default.createElement('input', { className: 'form-control', type: 'number', placeholder: 'Valor', value: this.state.valor, onChange: function onChange(event) {
+	              return _this2.setState({ valor: event.target.value });
+	            } }),
+	          _react2.default.createElement('input', { className: 'btn btn-default', type: 'submit', value: 'Enviar' })
+	        )
 	      );
 
 	      return this.rolesMatched() ? AdicionaProdutos : null;
@@ -59021,6 +59040,10 @@
 
 	var _FilterData2 = _interopRequireDefault(_FilterData);
 
+	var _AddFornecedores = __webpack_require__(296);
+
+	var _AddFornecedores2 = _interopRequireDefault(_AddFornecedores);
+
 	var _jsCookie = __webpack_require__(262);
 
 	var _jsCookie2 = _interopRequireDefault(_jsCookie);
@@ -59045,7 +59068,7 @@
 	      dados: '',
 	      renderData: ''
 	    };
-
+	    _this.onNewFornecedor = _this.onNewFornecedor.bind(_this);
 	    return _this;
 	  }
 
@@ -59063,6 +59086,17 @@
 	      });
 	    }
 	  }, {
+	    key: 'onNewFornecedor',
+	    value: function onNewFornecedor(data) {
+	      this.props.postFornecedores(data);
+	      var fornecedores = this.props.fornecedores;
+	      data.id = Date.now();
+	      this.setState({
+	        dados: fornecedores.concat([data]),
+	        renderData: fornecedores.concat([data])
+	      });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this2 = this;
@@ -59077,11 +59111,7 @@
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        _react2.default.createElement(
-	          'h3',
-	          null,
-	          'Busca Fornecedores'
-	        ),
+	        _react2.default.createElement(_AddFornecedores2.default, { onFornecedorSubmit: this.onNewFornecedor }),
 	        _react2.default.createElement(_FilterData2.default, { onSearchSubmit: function onSearchSubmit(filteredData) {
 	            _this2.setState({ renderData: filteredData });
 	          }, data: this.state.dados, type: "fornecedores" }),
@@ -59097,7 +59127,7 @@
 	  return { fornecedores: state.fornecedores };
 	}
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, { getFornecedores: _index.getFornecedores })(Fornecedores);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { getFornecedores: _index.getFornecedores, postFornecedores: _index.postFornecedores })(Fornecedores);
 
 /***/ },
 /* 295 */
@@ -59156,7 +59186,7 @@
 	      });
 	      return _react2.default.createElement(
 	        "div",
-	        { className: "col-md-10 col-md-offset-1" },
+	        { className: "col-md-4 col-md-offset-4" },
 	        _react2.default.createElement(
 	          "h1",
 	          null,
@@ -59200,6 +59230,96 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouterRoleAuthorization = __webpack_require__(292);
+
+	var _jsCookie = __webpack_require__(262);
+
+	var _jsCookie2 = _interopRequireDefault(_jsCookie);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var AddFornecedores = function (_RoleAwareComponent) {
+	  _inherits(AddFornecedores, _RoleAwareComponent);
+
+	  function AddFornecedores(props) {
+	    _classCallCheck(this, AddFornecedores);
+
+	    var _this = _possibleConstructorReturn(this, (AddFornecedores.__proto__ || Object.getPrototypeOf(AddFornecedores)).call(this, props));
+
+	    _this.state = {
+	      nome: ''
+	    };
+	    _this.handleSubmit = _this.handleSubmit.bind(_this);
+	    _this.allowedRoles = ['admin'];
+	    _this.userRoles = [_jsCookie2.default.get('roles')];
+	    return _this;
+	  }
+
+	  _createClass(AddFornecedores, [{
+	    key: 'handleSubmit',
+	    value: function handleSubmit(e) {
+	      e.preventDefault();
+	      var nome = this.state.nome.trim();
+	      if (!nome) {
+	        return;
+	      }
+	      this.props.onFornecedorSubmit({ nome: nome });
+	      this.setState({ nome: '' });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      var AdicionaFornecedor = _react2.default.createElement(
+	        'div',
+	        { className: 'col-md-4 col-md-offset-4' },
+	        _react2.default.createElement(
+	          'h3',
+	          null,
+	          'Adiciona Fornecedores'
+	        ),
+	        _react2.default.createElement(
+	          'form',
+	          { className: 'form-group', onSubmit: this.handleSubmit },
+	          _react2.default.createElement('input', { className: 'form-control', type: 'text', placeholder: 'Nome', value: this.state.nome, onChange: function onChange(event) {
+	              return _this2.setState({ nome: event.target.value });
+	            } }),
+	          _react2.default.createElement('input', { className: 'btn btn-default', type: 'submit', value: 'Enviar' })
+	        )
+	      );
+
+	      return this.rolesMatched() ? AdicionaFornecedor : null;
+	    }
+	  }]);
+
+	  return AddFornecedores;
+	}(_reactRouterRoleAuthorization.RoleAwareComponent);
+
+	exports.default = AddFornecedores;
+
+/***/ },
+/* 297 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 
@@ -59211,7 +59331,7 @@
 
 	var _reactRouterRoleAuthorization = __webpack_require__(292);
 
-	var _auth = __webpack_require__(297);
+	var _auth = __webpack_require__(298);
 
 	var _jsCookie = __webpack_require__(262);
 
@@ -59311,7 +59431,7 @@
 	exports.default = Home;
 
 /***/ },
-/* 297 */
+/* 298 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59423,7 +59543,7 @@
 	}
 
 /***/ },
-/* 298 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59438,7 +59558,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _auth = __webpack_require__(297);
+	var _auth = __webpack_require__(298);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -59522,7 +59642,7 @@
 	exports.default = Login;
 
 /***/ },
-/* 299 */
+/* 300 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59571,7 +59691,7 @@
 	exports.default = NotFoundComponent;
 
 /***/ },
-/* 300 */
+/* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59582,11 +59702,11 @@
 
 	var _redux = __webpack_require__(180);
 
-	var _reducers_produto = __webpack_require__(301);
+	var _reducers_produto = __webpack_require__(302);
 
 	var _reducers_produto2 = _interopRequireDefault(_reducers_produto);
 
-	var _reducers_fornecedores = __webpack_require__(302);
+	var _reducers_fornecedores = __webpack_require__(303);
 
 	var _reducers_fornecedores2 = _interopRequireDefault(_reducers_fornecedores);
 
@@ -59600,7 +59720,7 @@
 	exports.default = rootReducer;
 
 /***/ },
-/* 301 */
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59626,7 +59746,7 @@
 	var INITIAL_STATE = null;
 
 /***/ },
-/* 302 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59652,7 +59772,7 @@
 	var INITIAL_STATE = null;
 
 /***/ },
-/* 303 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59663,7 +59783,7 @@
 
 	exports['default'] = promiseMiddleware;
 
-	var _fluxStandardAction = __webpack_require__(304);
+	var _fluxStandardAction = __webpack_require__(305);
 
 	function isPromise(val) {
 	  return val && typeof val.then === 'function';
@@ -59690,7 +59810,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 304 */
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59701,7 +59821,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _lodashIsplainobject = __webpack_require__(305);
+	var _lodashIsplainobject = __webpack_require__(306);
 
 	var _lodashIsplainobject2 = _interopRequireDefault(_lodashIsplainobject);
 
@@ -59720,7 +59840,7 @@
 	}
 
 /***/ },
-/* 305 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -59731,9 +59851,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var baseFor = __webpack_require__(306),
-	    isArguments = __webpack_require__(307),
-	    keysIn = __webpack_require__(308);
+	var baseFor = __webpack_require__(307),
+	    isArguments = __webpack_require__(308),
+	    keysIn = __webpack_require__(309);
 
 	/** `Object#toString` result references. */
 	var objectTag = '[object Object]';
@@ -59829,7 +59949,7 @@
 
 
 /***/ },
-/* 306 */
+/* 307 */
 /***/ function(module, exports) {
 
 	/**
@@ -59883,7 +60003,7 @@
 
 
 /***/ },
-/* 307 */
+/* 308 */
 /***/ function(module, exports) {
 
 	/**
@@ -60118,7 +60238,7 @@
 
 
 /***/ },
-/* 308 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -60129,8 +60249,8 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var isArguments = __webpack_require__(307),
-	    isArray = __webpack_require__(309);
+	var isArguments = __webpack_require__(308),
+	    isArray = __webpack_require__(310);
 
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
@@ -60256,7 +60376,7 @@
 
 
 /***/ },
-/* 309 */
+/* 310 */
 /***/ function(module, exports) {
 
 	/**
