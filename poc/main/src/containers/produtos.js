@@ -49,7 +49,7 @@ class Produtos extends Component{
         <div className="col-md-12">
           <h1>Lista de Produtos</h1>
           <AddProdutos onProdutoSubmit={this.onNewProdut}/>
-          <FilterData onSearchSubmit={ (filteredData) => {this.setState({renderData: filteredData})} } data={this.state.dados}  />
+          <FilterData onSearchSubmit={ (filteredData) => {this.setState({renderData: filteredData})} } data={this.state.dados} type={"produtos"}/>
           <Tabela data={this.state.renderData} />
         </div>
       );

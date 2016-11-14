@@ -12,16 +12,28 @@ export default class FilterData extends Component{
         filterData = this.props.data;
       }else{
         var original_data = this.props.data;
-        filterData = original_data.filter(function (filter) {
-            return filter.nome.toString().toLowerCase().indexOf(chave.toString().toLowerCase()) !== -1 || filter.valor.toString().toLowerCase().indexOf(chave.toString().toLowerCase()) !== -1;;
-        });
+        switch (this.props.type) {
+          case "fornecedores":
+            filterData = original_data.filter(function (filter) {
+                return filter.nome.toString().toLowerCase().indexOf(chave.toString().toLowerCase()) !== -1;
+            });
+          break;
+          case "produtos":
+            filterData = original_data.filter(function (filter) {
+                return filter.nome.toString().toLowerCase().indexOf(chave.toString().toLowerCase()) !== -1 || filter.valor.toString().toLowerCase().indexOf(chave.toString().toLowerCase()) !== -1;
+            });
+          break;
+        }
       }
+      console.log(filterData);
       this.props.onSearchSubmit(filterData);
     }
 
     render() {
       return (
+        <div className="col-md-4 col-md-offset-4">
           <input className="form-control" type="text" placeholder="Search..." ref="searchRef" defaultValue="" onChange={ (event) => this.getRows(event.target.value)}/>
+        </div>
       );
     }
 }

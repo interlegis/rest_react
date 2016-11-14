@@ -1,39 +1,44 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getFornecedores } from '../actions/index';
+import TabelaFornecedores from '../components/TabelaFornecedores'
+import FilterData from '../containers/FilterData'
 import Cookies from 'js-cookie';
 
 class Fornecedores extends Component{
+  constructor(props){
+    super(props);
+
+    this.state = ({
+      dados: '',
+      renderData: ''
+    });
+
+  }
   componentWillMount() {
     this.props.getFornecedores();
   }
 
+  componentWillReceiveProps(nextProps){
+    this.setState({
+      dados: nextProps.fornecedores,
+      renderData: nextProps.fornecedores
+    });
+  }
+
   render(){
-      if (!this.props.fornecedores) {
+      if (!this.state.dados) {
         return (
-          <div>Loading...</div>
-        );
+          <div className="col-md-12">
+            Loading...
+          </div>
+        )
       }
-      var itensTabela = this.props.fornecedores.map( function(fornecedor) {
-        return (
-          <tr key={fornecedor.nome}>
-            <td>{fornecedor.nome}</td>
-          </tr>
-        );
-      });
       return(
-        <div className="col-md-10 col-md-offset-1">
-            <h1>Lista de Fornecedores</h1>
-            <table className="table-bordered table">
-              <thead>
-                <tr>
-                  <th>Nome</th>
-                </tr>
-              </thead>
-              <tbody>
-                {itensTabela}
-              </tbody>
-            </table>
+        <div>
+          <h3>Busca Fornecedores</h3>
+          <FilterData onSearchSubmit={ (filteredData) => {this.setState({renderData: filteredData})} } data={this.state.dados} type={"fornecedores"}  />
+          <TabelaFornecedores data={this.state.renderData}/>
         </div>
       );
   }

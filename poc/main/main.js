@@ -71,11 +71,11 @@
 
 	var _routes2 = _interopRequireDefault(_routes);
 
-	var _reducers = __webpack_require__(299);
+	var _reducers = __webpack_require__(300);
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
-	var _reduxPromise = __webpack_require__(302);
+	var _reduxPromise = __webpack_require__(303);
 
 	var _reduxPromise2 = _interopRequireDefault(_reduxPromise);
 
@@ -28020,17 +28020,17 @@
 
 	var _PageFornecedor2 = _interopRequireDefault(_PageFornecedor);
 
-	var _home = __webpack_require__(295);
+	var _home = __webpack_require__(296);
 
 	var _home2 = _interopRequireDefault(_home);
 
-	var _login = __webpack_require__(297);
+	var _login = __webpack_require__(298);
 
 	var _login2 = _interopRequireDefault(_login);
 
-	var _auth = __webpack_require__(296);
+	var _auth = __webpack_require__(297);
 
-	var _notfound = __webpack_require__(298);
+	var _notfound = __webpack_require__(299);
 
 	var _notfound2 = _interopRequireDefault(_notfound);
 
@@ -28320,7 +28320,7 @@
 	        _react2.default.createElement(_AddProdutos2.default, { onProdutoSubmit: this.onNewProdut }),
 	        _react2.default.createElement(_FilterData2.default, { onSearchSubmit: function onSearchSubmit(filteredData) {
 	            _this2.setState({ renderData: filteredData });
-	          }, data: this.state.dados }),
+	          }, data: this.state.dados, type: "produtos" }),
 	        _react2.default.createElement(_Tabela2.default, { data: this.state.renderData })
 	      );
 	    }
@@ -40467,10 +40467,20 @@
 	        filterData = this.props.data;
 	      } else {
 	        var original_data = this.props.data;
-	        filterData = original_data.filter(function (filter) {
-	          return filter.nome.toString().toLowerCase().indexOf(chave.toString().toLowerCase()) !== -1 || filter.valor.toString().toLowerCase().indexOf(chave.toString().toLowerCase()) !== -1;;
-	        });
+	        switch (this.props.type) {
+	          case "fornecedores":
+	            filterData = original_data.filter(function (filter) {
+	              return filter.nome.toString().toLowerCase().indexOf(chave.toString().toLowerCase()) !== -1;
+	            });
+	            break;
+	          case "produtos":
+	            filterData = original_data.filter(function (filter) {
+	              return filter.nome.toString().toLowerCase().indexOf(chave.toString().toLowerCase()) !== -1 || filter.valor.toString().toLowerCase().indexOf(chave.toString().toLowerCase()) !== -1;
+	            });
+	            break;
+	        }
 	      }
+	      console.log(filterData);
 	      this.props.onSearchSubmit(filterData);
 	    }
 	  }, {
@@ -40478,9 +40488,13 @@
 	    value: function render() {
 	      var _this2 = this;
 
-	      return _react2.default.createElement("input", { className: "form-control", type: "text", placeholder: "Search...", ref: "searchRef", defaultValue: "", onChange: function onChange(event) {
-	          return _this2.getRows(event.target.value);
-	        } });
+	      return _react2.default.createElement(
+	        "div",
+	        { className: "col-md-4 col-md-offset-4" },
+	        _react2.default.createElement("input", { className: "form-control", type: "text", placeholder: "Search...", ref: "searchRef", defaultValue: "", onChange: function onChange(event) {
+	            return _this2.getRows(event.target.value);
+	          } })
+	      );
 	    }
 	  }]);
 
@@ -58999,6 +59013,14 @@
 
 	var _index = __webpack_require__(260);
 
+	var _TabelaFornecedores = __webpack_require__(295);
+
+	var _TabelaFornecedores2 = _interopRequireDefault(_TabelaFornecedores);
+
+	var _FilterData = __webpack_require__(290);
+
+	var _FilterData2 = _interopRequireDefault(_FilterData);
+
 	var _jsCookie = __webpack_require__(262);
 
 	var _jsCookie2 = _interopRequireDefault(_jsCookie);
@@ -59014,10 +59036,17 @@
 	var Fornecedores = function (_Component) {
 	  _inherits(Fornecedores, _Component);
 
-	  function Fornecedores() {
+	  function Fornecedores(props) {
 	    _classCallCheck(this, Fornecedores);
 
-	    return _possibleConstructorReturn(this, (Fornecedores.__proto__ || Object.getPrototypeOf(Fornecedores)).apply(this, arguments));
+	    var _this = _possibleConstructorReturn(this, (Fornecedores.__proto__ || Object.getPrototypeOf(Fornecedores)).call(this, props));
+
+	    _this.state = {
+	      dados: '',
+	      renderData: ''
+	    };
+
+	    return _this;
 	  }
 
 	  _createClass(Fornecedores, [{
@@ -59026,56 +59055,37 @@
 	      this.props.getFornecedores();
 	    }
 	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      this.setState({
+	        dados: nextProps.fornecedores,
+	        renderData: nextProps.fornecedores
+	      });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
-	      if (!this.props.fornecedores) {
+	      var _this2 = this;
+
+	      if (!this.state.dados) {
 	        return _react2.default.createElement(
 	          'div',
-	          null,
+	          { className: 'col-md-12' },
 	          'Loading...'
 	        );
 	      }
-	      var itensTabela = this.props.fornecedores.map(function (fornecedor) {
-	        return _react2.default.createElement(
-	          'tr',
-	          { key: fornecedor.nome },
-	          _react2.default.createElement(
-	            'td',
-	            null,
-	            fornecedor.nome
-	          )
-	        );
-	      });
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'col-md-10 col-md-offset-1' },
+	        null,
 	        _react2.default.createElement(
-	          'h1',
+	          'h3',
 	          null,
-	          'Lista de Fornecedores'
+	          'Busca Fornecedores'
 	        ),
-	        _react2.default.createElement(
-	          'table',
-	          { className: 'table-bordered table' },
-	          _react2.default.createElement(
-	            'thead',
-	            null,
-	            _react2.default.createElement(
-	              'tr',
-	              null,
-	              _react2.default.createElement(
-	                'th',
-	                null,
-	                'Nome'
-	              )
-	            )
-	          ),
-	          _react2.default.createElement(
-	            'tbody',
-	            null,
-	            itensTabela
-	          )
-	        )
+	        _react2.default.createElement(_FilterData2.default, { onSearchSubmit: function onSearchSubmit(filteredData) {
+	            _this2.setState({ renderData: filteredData });
+	          }, data: this.state.dados, type: "fornecedores" }),
+	        _react2.default.createElement(_TabelaFornecedores2.default, { data: this.state.renderData })
 	      );
 	    }
 	  }]);
@@ -59093,6 +59103,100 @@
 /* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var TabelaFornecedores = function (_Component) {
+	  _inherits(TabelaFornecedores, _Component);
+
+	  function TabelaFornecedores() {
+	    _classCallCheck(this, TabelaFornecedores);
+
+	    return _possibleConstructorReturn(this, (TabelaFornecedores.__proto__ || Object.getPrototypeOf(TabelaFornecedores)).apply(this, arguments));
+	  }
+
+	  _createClass(TabelaFornecedores, [{
+	    key: "render",
+	    value: function render() {
+	      console.log(this.props.data);
+	      if (!this.props.data) {
+	        return _react2.default.createElement(
+	          "div",
+	          null,
+	          "Loading..."
+	        );
+	      }
+	      var itensTabela = this.props.data.map(function (fornecedor) {
+	        return _react2.default.createElement(
+	          "tr",
+	          { key: fornecedor.nome },
+	          _react2.default.createElement(
+	            "td",
+	            null,
+	            fornecedor.nome
+	          )
+	        );
+	      });
+	      return _react2.default.createElement(
+	        "div",
+	        { className: "col-md-10 col-md-offset-1" },
+	        _react2.default.createElement(
+	          "h1",
+	          null,
+	          "Lista de Fornecedores"
+	        ),
+	        _react2.default.createElement(
+	          "table",
+	          { className: "table-bordered table" },
+	          _react2.default.createElement(
+	            "thead",
+	            null,
+	            _react2.default.createElement(
+	              "tr",
+	              null,
+	              _react2.default.createElement(
+	                "th",
+	                null,
+	                "Nome"
+	              )
+	            )
+	          ),
+	          _react2.default.createElement(
+	            "tbody",
+	            null,
+	            itensTabela
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return TabelaFornecedores;
+	}(_react.Component);
+
+	exports.default = TabelaFornecedores;
+
+/***/ },
+/* 296 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -59107,7 +59211,7 @@
 
 	var _reactRouterRoleAuthorization = __webpack_require__(292);
 
-	var _auth = __webpack_require__(296);
+	var _auth = __webpack_require__(297);
 
 	var _jsCookie = __webpack_require__(262);
 
@@ -59207,7 +59311,7 @@
 	exports.default = Home;
 
 /***/ },
-/* 296 */
+/* 297 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59319,7 +59423,7 @@
 	}
 
 /***/ },
-/* 297 */
+/* 298 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59334,7 +59438,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _auth = __webpack_require__(296);
+	var _auth = __webpack_require__(297);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -59418,7 +59522,7 @@
 	exports.default = Login;
 
 /***/ },
-/* 298 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59467,7 +59571,7 @@
 	exports.default = NotFoundComponent;
 
 /***/ },
-/* 299 */
+/* 300 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59478,11 +59582,11 @@
 
 	var _redux = __webpack_require__(180);
 
-	var _reducers_produto = __webpack_require__(300);
+	var _reducers_produto = __webpack_require__(301);
 
 	var _reducers_produto2 = _interopRequireDefault(_reducers_produto);
 
-	var _reducers_fornecedores = __webpack_require__(301);
+	var _reducers_fornecedores = __webpack_require__(302);
 
 	var _reducers_fornecedores2 = _interopRequireDefault(_reducers_fornecedores);
 
@@ -59496,7 +59600,7 @@
 	exports.default = rootReducer;
 
 /***/ },
-/* 300 */
+/* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59522,7 +59626,7 @@
 	var INITIAL_STATE = null;
 
 /***/ },
-/* 301 */
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59548,7 +59652,7 @@
 	var INITIAL_STATE = null;
 
 /***/ },
-/* 302 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59559,7 +59663,7 @@
 
 	exports['default'] = promiseMiddleware;
 
-	var _fluxStandardAction = __webpack_require__(303);
+	var _fluxStandardAction = __webpack_require__(304);
 
 	function isPromise(val) {
 	  return val && typeof val.then === 'function';
@@ -59586,7 +59690,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 303 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59597,7 +59701,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _lodashIsplainobject = __webpack_require__(304);
+	var _lodashIsplainobject = __webpack_require__(305);
 
 	var _lodashIsplainobject2 = _interopRequireDefault(_lodashIsplainobject);
 
@@ -59616,7 +59720,7 @@
 	}
 
 /***/ },
-/* 304 */
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -59627,9 +59731,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var baseFor = __webpack_require__(305),
-	    isArguments = __webpack_require__(306),
-	    keysIn = __webpack_require__(307);
+	var baseFor = __webpack_require__(306),
+	    isArguments = __webpack_require__(307),
+	    keysIn = __webpack_require__(308);
 
 	/** `Object#toString` result references. */
 	var objectTag = '[object Object]';
@@ -59725,7 +59829,7 @@
 
 
 /***/ },
-/* 305 */
+/* 306 */
 /***/ function(module, exports) {
 
 	/**
@@ -59779,7 +59883,7 @@
 
 
 /***/ },
-/* 306 */
+/* 307 */
 /***/ function(module, exports) {
 
 	/**
@@ -60014,7 +60118,7 @@
 
 
 /***/ },
-/* 307 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -60025,8 +60129,8 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var isArguments = __webpack_require__(306),
-	    isArray = __webpack_require__(308);
+	var isArguments = __webpack_require__(307),
+	    isArray = __webpack_require__(309);
 
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
@@ -60152,7 +60256,7 @@
 
 
 /***/ },
-/* 308 */
+/* 309 */
 /***/ function(module, exports) {
 
 	/**
