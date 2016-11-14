@@ -31,7 +31,8 @@ export default class Login extends Component{
 
     render() {
         return (
-          <div className="col-md-3">
+          <div className="col-md-2 col-md-offset-5">
+            <h1>Login</h1>
             <form onSubmit={this.handleSubmit} className="form-group">
                 <input type="text" placeholder="Usuario" className="form-control" value={this.state.user} onChange={ (event) => this.setState({user: event.target.value})}/>
                 <input type="password" placeholder="Senha" className="form-control" value={this.state.pass} onChange={ (event) => this.setState({pass: event.target.value})}/>

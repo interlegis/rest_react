@@ -17,7 +17,10 @@ export function login(username, pass, cb) {
   }
 
   export function logout(){
-        Cookies.remove('name');
+        Cookies.remove('roles');
+        Cookies.remove('username');
+        Cookies.remove('user');
+        Cookies.remove('sessionid');
         delete localStorage.token
   }
 
@@ -64,6 +67,7 @@ export function login(username, pass, cb) {
                       'Authorization': "Token " + localStorage.token
                   },
                 success: function(res) {
+                  console.log(res.groups[0]);
                   Cookies.set('username', res.username);
                   switch (res.groups[0]) {
                     case 1:
@@ -71,6 +75,9 @@ export function login(username, pass, cb) {
                     break;
                     case 2:
                       Cookies.set('roles', "admin");
+                    break;
+                    case 3:
+                      Cookies.set('roles', "fornecedor");
                     break;
                   }
               }

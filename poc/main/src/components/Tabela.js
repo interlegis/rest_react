@@ -18,7 +18,7 @@ export default class Tabela extends Component{
       );
     });
     return (
-      <div className="col-md-12">
+      <div className="col-md-10 col-md-offset-1">
           <h1>Lista de Produtos</h1>
           <table className="table-bordered table">
             <thead>
