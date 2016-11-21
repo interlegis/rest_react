@@ -11,6 +11,7 @@ export default class App extends Component {
                   <li><Link to="/index">Início</Link></li>
                   <li><Link to="/produtos/">Produtos</Link></li>
                   <li><Link to="/fornecedores/">Fornecedores</Link></li>
+                  <li><Link to="/local/">Local</Link></li>
               </ul>
           </div>
         </nav>

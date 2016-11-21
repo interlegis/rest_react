@@ -28020,6 +28020,10 @@
 
 	var _PageFornecedor2 = _interopRequireDefault(_PageFornecedor);
 
+	var _PageLocal = __webpack_require__(311);
+
+	var _PageLocal2 = _interopRequireDefault(_PageLocal);
+
 	var _home = __webpack_require__(297);
 
 	var _home2 = _interopRequireDefault(_home);
@@ -28052,6 +28056,7 @@
 	    _react2.default.createElement(_reactRouter.Route, { path: '/login/', component: _login2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { authorize: ['user', 'admin'], path: '/produtos/', component: _PageProduto2.default, onEnter: requireAuth }),
 	    _react2.default.createElement(_reactRouter.Route, { authorize: ['fornecedor', 'admin'], path: '/fornecedores/', component: _PageFornecedor2.default, onEnter: requireAuth }),
+	    _react2.default.createElement(_reactRouter.Route, { authorize: ['admin', 'user', 'fornecedor'], path: '/local/', component: _PageLocal2.default, onEnter: requireAuth }),
 	    _react2.default.createElement(_reactRouter.Route, { path: '/not-found', component: _notfound2.default })
 	);
 
@@ -28130,6 +28135,15 @@
 	                  _reactRouter.Link,
 	                  { to: '/fornecedores/' },
 	                  'Fornecedores'
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'li',
+	                null,
+	                _react2.default.createElement(
+	                  _reactRouter.Link,
+	                  { to: '/local/' },
+	                  'Local'
 	                )
 	              )
 	            )
@@ -28339,11 +28353,13 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.FORNECEDORES_POST = exports.FORNECEDORES_GET = exports.PRODUTOS_POST = exports.PRODUTOS_GET = undefined;
+	exports.LOCAL_GET = exports.LOCAL_POST = exports.FORNECEDORES_POST = exports.FORNECEDORES_GET = exports.PRODUTOS_POST = exports.PRODUTOS_GET = undefined;
 	exports.getProdutos = getProdutos;
 	exports.postProduto = postProduto;
 	exports.getFornecedores = getFornecedores;
 	exports.postFornecedores = postFornecedores;
+	exports.getLocal = getLocal;
+	exports.postLocal = postLocal;
 
 	var _jquery = __webpack_require__(261);
 
@@ -28363,6 +28379,8 @@
 	var PRODUTOS_POST = exports.PRODUTOS_POST = 'PRODUTOS_POST';
 	var FORNECEDORES_GET = exports.FORNECEDORES_GET = 'FORNECEDORES_GET';
 	var FORNECEDORES_POST = exports.FORNECEDORES_POST = 'FORNECEDORES_POST';
+	var LOCAL_POST = exports.LOCAL_POST = 'LOCAL_POST';
+	var LOCAL_GET = exports.LOCAL_GET = 'LOCAL_GET';
 
 	var config = {
 	  headers: {
@@ -28372,7 +28390,7 @@
 	};
 
 	function getProdutos() {
-	  var request = _axios2.default.get('/estoque_api/produtos/', config);
+	  var request = _axios2.default.get('/api/produtos/', config);
 	  return {
 	    type: PRODUTOS_GET,
 	    payload: request
@@ -28380,7 +28398,7 @@
 	}
 
 	function postProduto(props) {
-	  var request = _axios2.default.post('/estoque_api/produtos/', props, config);
+	  var request = _axios2.default.post('/api/produtos/', props, config);
 	  return {
 	    type: PRODUTOS_POST,
 	    payload: request
@@ -28388,7 +28406,7 @@
 	}
 
 	function getFornecedores() {
-	  var request = _axios2.default.get('/estoque_api/fornecedores/', config);
+	  var request = _axios2.default.get('/api/fornecedores/', config);
 	  return {
 	    type: FORNECEDORES_GET,
 	    payload: request
@@ -28396,9 +28414,25 @@
 	}
 
 	function postFornecedores(props) {
-	  var request = _axios2.default.post('/estoque_api/fornecedores/', props, config);
+	  var request = _axios2.default.post('/api/fornecedores/', props, config);
 	  return {
 	    type: FORNECEDORES_POST,
+	    payload: request
+	  };
+	}
+
+	function getLocal() {
+	  var request = _axios2.default.get('/api/local/', config);
+	  return {
+	    type: LOCAL_GET,
+	    payload: request
+	  };
+	}
+
+	function postLocal(props) {
+	  var request = _axios2.default.post('/api/local/', props, config);
+	  return {
+	    type: LOCAL_POST,
 	    payload: request
 	  };
 	}
@@ -40481,6 +40515,11 @@
 	          case "produtos":
 	            filterData = original_data.filter(function (filter) {
 	              return filter.nome.toString().toLowerCase().indexOf(chave.toString().toLowerCase()) !== -1 || filter.valor.toString().toLowerCase().indexOf(chave.toString().toLowerCase()) !== -1;
+	            });
+	            break;
+	          case "local":
+	            filterData = original_data.filter(function (filter) {
+	              return filter.nome.toString().toLowerCase().indexOf(chave.toString().toLowerCase()) !== -1 || filter.cidade.toString().toLowerCase().indexOf(chave.toString().toLowerCase()) !== -1;
 	            });
 	            break;
 	        }
@@ -59391,7 +59430,7 @@
 	            });
 	            _jquery2.default.ajax({
 	                method: 'GET',
-	                url: '/estoque_api/users/i/',
+	                url: '/api/users/i/',
 	                datatype: 'json',
 	                headers: {
 	                    'Authorization': "Token " + localStorage.token
@@ -59514,7 +59553,7 @@
 	            });
 	            _jquery2.default.ajax({
 	                method: 'GET',
-	                url: '/estoque_api/users/i/',
+	                url: '/api/users/i/',
 	                datatype: 'json',
 	                headers: {
 	                    'Authorization': "Token " + localStorage.token
@@ -59710,11 +59749,16 @@
 
 	var _reducers_fornecedores2 = _interopRequireDefault(_reducers_fornecedores);
 
+	var _reducers_local = __webpack_require__(312);
+
+	var _reducers_local2 = _interopRequireDefault(_reducers_local);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var rootReducer = (0, _redux.combineReducers)({
 	  produtos: _reducers_produto2.default,
-	  fornecedores: _reducers_fornecedores2.default
+	  fornecedores: _reducers_fornecedores2.default,
+	  locais: _reducers_local2.default
 	});
 
 	exports.default = rootReducer;
@@ -60560,6 +60604,427 @@
 
 	module.exports = isArray;
 
+
+/***/ },
+/* 311 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Local = __webpack_require__(313);
+
+	var _Local2 = _interopRequireDefault(_Local);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var PageLocal = function (_Component) {
+	  _inherits(PageLocal, _Component);
+
+	  function PageLocal() {
+	    _classCallCheck(this, PageLocal);
+
+	    return _possibleConstructorReturn(this, (PageLocal.__proto__ || Object.getPrototypeOf(PageLocal)).apply(this, arguments));
+	  }
+
+	  _createClass(PageLocal, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(_Local2.default, null);
+	    }
+	  }]);
+
+	  return PageLocal;
+	}(_react.Component);
+
+	exports.default = PageLocal;
+
+/***/ },
+/* 312 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	exports.default = function () {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : INITIAL_STATE;
+	  var action = arguments[1];
+
+	  switch (action.type) {
+	    case _index.LOCAL_GET:
+	      return action.payload.data;
+	    default:
+	      return state;
+	  }
+	};
+
+	var _index = __webpack_require__(260);
+
+	var INITIAL_STATE = null;
+
+/***/ },
+/* 313 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(173);
+
+	var _index = __webpack_require__(260);
+
+	var _TabelaLocal = __webpack_require__(314);
+
+	var _TabelaLocal2 = _interopRequireDefault(_TabelaLocal);
+
+	var _AddLocal = __webpack_require__(315);
+
+	var _AddLocal2 = _interopRequireDefault(_AddLocal);
+
+	var _FilterData = __webpack_require__(290);
+
+	var _FilterData2 = _interopRequireDefault(_FilterData);
+
+	var _jsCookie = __webpack_require__(262);
+
+	var _jsCookie2 = _interopRequireDefault(_jsCookie);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Local = function (_Component) {
+	  _inherits(Local, _Component);
+
+	  function Local(props) {
+	    _classCallCheck(this, Local);
+
+	    var _this = _possibleConstructorReturn(this, (Local.__proto__ || Object.getPrototypeOf(Local)).call(this, props));
+
+	    _this.state = {
+	      dados: '',
+	      renderData: ''
+	    };
+	    _this.onNewProdut = _this.onNewProdut.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(Local, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      this.props.getLocal();
+	    }
+	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      this.setState({
+	        dados: nextProps.locais,
+	        renderData: nextProps.locais
+	      });
+	    }
+	  }, {
+	    key: 'onNewProdut',
+	    value: function onNewProdut(data) {
+	      this.props.postLocal(data);
+	      var locais = this.props.locais;
+	      data.id = Date.now();
+	      this.setState({
+	        dados: locais.concat([data]),
+	        renderData: locais.concat([data])
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      if (!this.state.dados) {
+	        return _react2.default.createElement(
+	          'div',
+	          { className: 'col-md-12' },
+	          'Loading...'
+	        );
+	      }
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'col-md-12' },
+	        _react2.default.createElement(_AddLocal2.default, { onLocalSubmit: this.onNewProdut }),
+	        _react2.default.createElement(_FilterData2.default, { onSearchSubmit: function onSearchSubmit(filteredData) {
+	            _this2.setState({ renderData: filteredData });
+	          }, data: this.state.dados, type: "local" }),
+	        _react2.default.createElement(_TabelaLocal2.default, { data: this.state.renderData })
+	      );
+	    }
+	  }]);
+
+	  return Local;
+	}(_react.Component);
+
+	function mapStateToProps(state) {
+	  return { locais: state.locais };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { getLocal: _index.getLocal, postLocal: _index.postLocal })(Local);
+
+/***/ },
+/* 314 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var TabelaLocal = function (_Component) {
+	  _inherits(TabelaLocal, _Component);
+
+	  function TabelaLocal() {
+	    _classCallCheck(this, TabelaLocal);
+
+	    return _possibleConstructorReturn(this, (TabelaLocal.__proto__ || Object.getPrototypeOf(TabelaLocal)).apply(this, arguments));
+	  }
+
+	  _createClass(TabelaLocal, [{
+	    key: "render",
+	    value: function render() {
+	      console.log(this.props.data);
+	      if (!this.props.data) {
+	        return _react2.default.createElement(
+	          "div",
+	          null,
+	          "Loading..."
+	        );
+	      }
+	      var itensTabela = this.props.data.map(function (fornecedor) {
+	        return _react2.default.createElement(
+	          "tr",
+	          { key: "" + fornecedor.nome + fornecedor.estado },
+	          _react2.default.createElement(
+	            "td",
+	            null,
+	            fornecedor.nome
+	          ),
+	          _react2.default.createElement(
+	            "td",
+	            null,
+	            fornecedor.cidade
+	          ),
+	          _react2.default.createElement(
+	            "td",
+	            null,
+	            fornecedor.estado
+	          ),
+	          _react2.default.createElement(
+	            "td",
+	            null,
+	            fornecedor.habitantes
+	          )
+	        );
+	      });
+	      return _react2.default.createElement(
+	        "div",
+	        { className: "col-md-4 col-md-offset-4" },
+	        _react2.default.createElement(
+	          "h1",
+	          null,
+	          "Lista de Fornecedores"
+	        ),
+	        _react2.default.createElement(
+	          "table",
+	          { className: "table-bordered table" },
+	          _react2.default.createElement(
+	            "thead",
+	            null,
+	            _react2.default.createElement(
+	              "tr",
+	              null,
+	              _react2.default.createElement(
+	                "th",
+	                null,
+	                "Nome"
+	              ),
+	              _react2.default.createElement(
+	                "th",
+	                null,
+	                "Cidade"
+	              ),
+	              _react2.default.createElement(
+	                "th",
+	                null,
+	                "Estado"
+	              ),
+	              _react2.default.createElement(
+	                "th",
+	                null,
+	                "Habitantes"
+	              )
+	            )
+	          ),
+	          _react2.default.createElement(
+	            "tbody",
+	            null,
+	            itensTabela
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return TabelaLocal;
+	}(_react.Component);
+
+	exports.default = TabelaLocal;
+
+/***/ },
+/* 315 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouterRoleAuthorization = __webpack_require__(292);
+
+	var _jsCookie = __webpack_require__(262);
+
+	var _jsCookie2 = _interopRequireDefault(_jsCookie);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var AddProdutos = function (_RoleAwareComponent) {
+	  _inherits(AddProdutos, _RoleAwareComponent);
+
+	  function AddProdutos(props) {
+	    _classCallCheck(this, AddProdutos);
+
+	    var _this = _possibleConstructorReturn(this, (AddProdutos.__proto__ || Object.getPrototypeOf(AddProdutos)).call(this, props));
+
+	    _this.state = {
+	      nome: '',
+	      cidade: '',
+	      estado: '',
+	      habitantes: ''
+	    };
+	    _this.handleSubmit = _this.handleSubmit.bind(_this);
+	    _this.allowedRoles = ['admin'];
+	    _this.userRoles = [_jsCookie2.default.get('roles')];
+	    return _this;
+	  }
+
+	  _createClass(AddProdutos, [{
+	    key: 'handleSubmit',
+	    value: function handleSubmit(e) {
+	      e.preventDefault();
+	      var nome = this.state.nome.trim();
+	      var cidade = this.state.cidade.trim();
+	      var estado = this.state.estado.trim();
+	      var habitantes = this.state.habitantes.trim();
+	      if (!nome || !cidade || !estado || !habitantes) {
+	        return;
+	      }
+	      this.props.onLocalSubmit({ nome: nome, cidade: cidade, estado: estado, habitantes: habitantes });
+	      this.setState({ nome: '', cidade: '', estado: '', habitantes: '' });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      var AdicionarLocal = _react2.default.createElement(
+	        'div',
+	        { className: 'col-md-4 col-md-offset-4' },
+	        _react2.default.createElement(
+	          'h3',
+	          null,
+	          'Adicionar Locais'
+	        ),
+	        _react2.default.createElement(
+	          'form',
+	          { className: 'form-group', onSubmit: this.handleSubmit },
+	          _react2.default.createElement('input', { className: 'form-control', type: 'text', placeholder: 'Nome', value: this.state.nome, onChange: function onChange(event) {
+	              return _this2.setState({ nome: event.target.value });
+	            } }),
+	          _react2.default.createElement('input', { className: 'form-control', type: 'text', placeholder: 'Cidade', value: this.state.cidade, onChange: function onChange(event) {
+	              return _this2.setState({ cidade: event.target.value });
+	            } }),
+	          _react2.default.createElement('input', { className: 'form-control', type: 'text', placeholder: 'Estado', value: this.state.estado, onChange: function onChange(event) {
+	              return _this2.setState({ estado: event.target.value });
+	            } }),
+	          _react2.default.createElement('input', { className: 'form-control', type: 'number', placeholder: 'Habitantes', value: this.state.habitantes, onChange: function onChange(event) {
+	              return _this2.setState({ habitantes: event.target.value });
+	            } }),
+	          _react2.default.createElement('input', { className: 'btn btn-default', type: 'submit', value: 'Enviar' })
+	        )
+	      );
+
+	      return this.rolesMatched() ? AdicionarLocal : null;
+	    }
+	  }]);
+
+	  return AddProdutos;
+	}(_reactRouterRoleAuthorization.RoleAwareComponent);
+
+	exports.default = AddProdutos;
 
 /***/ }
 /******/ ]);

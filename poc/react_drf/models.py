@@ -9,3 +9,10 @@ class Produtos(models.Model):
 
 class Fornecedores(models.Model):
     nome = models.CharField(blank=True, max_length=100)
+
+class Local(models.Model):
+    nome = models.CharField(blank=True, max_length=100)
+    cidade = models.CharField(blank=True, max_length=100)
+    estado = models.CharField(blank=True, max_length=100)
+    habitantes = models.IntegerField(blank=True, null=True)
+    metropole = models.BooleanField(default=False)

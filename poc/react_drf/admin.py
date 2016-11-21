@@ -4,4 +4,5 @@ from django.contrib import admin
 from react_drf.models import *
 
 admin.site.register(Produtos)
+admin.site.register(Local)
 admin.site.register(Fornecedores)

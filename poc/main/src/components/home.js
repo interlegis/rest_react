@@ -41,7 +41,7 @@ export default class Home extends  Component{
         });
         $.ajax({
             method: 'GET',
-            url: '/estoque_api/users/i/',
+            url: '/api/users/i/',
             datatype: 'json',
             headers: {
                 'Authorization': "Token " + localStorage.token

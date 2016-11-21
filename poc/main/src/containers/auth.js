@@ -61,7 +61,7 @@ export function login(username, pass, cb) {
               });
               $.ajax({
                   method: 'GET',
-                  url: '/estoque_api/users/i/',
+                  url: '/api/users/i/',
                   datatype: 'json',
                   headers: {
                       'Authorization': "Token " + localStorage.token

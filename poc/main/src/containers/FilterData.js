@@ -23,6 +23,11 @@ export default class FilterData extends Component{
                 return filter.nome.toString().toLowerCase().indexOf(chave.toString().toLowerCase()) !== -1 || filter.valor.toString().toLowerCase().indexOf(chave.toString().toLowerCase()) !== -1;
             });
           break;
+          case "local":
+            filterData = original_data.filter(function (filter) {
+                return filter.nome.toString().toLowerCase().indexOf(chave.toString().toLowerCase()) !== -1 || filter.cidade.toString().toLowerCase().indexOf(chave.toString().toLowerCase()) !== -1;
+            });
+          break;
         }
       }
       console.log(filterData);
