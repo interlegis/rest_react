@@ -8,6 +8,8 @@ export const FORNECEDORES_GET = 'FORNECEDORES_GET';
 export const FORNECEDORES_POST = 'FORNECEDORES_POST';
 export const LOCAL_POST = 'LOCAL_POST';
 export const LOCAL_GET = 'LOCAL_GET';
+export const POST_PDF = 'POST_PDF';
+export const GET_PDF = 'GET_PDF';
 
 const config = {
   headers: {
@@ -62,4 +64,23 @@ export function postLocal(props) {
      type: LOCAL_POST,
      payload: request
    };
+}
+
+export function postPdf(props) {
+  console.log(props);
+  const request = axios.post('/api/arquivo/',props,config);
+  return{
+     type: POST_PDF,
+     payload: request
+   };
+
+}
+
+export function getPdf() {
+  const request = axios.get('/api/arquivo/',config);
+  return{
+     type: GET_PDF,
+     payload: request
+   };
+
 }

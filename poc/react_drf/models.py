@@ -16,3 +16,8 @@ class Local(models.Model):
     estado = models.CharField(blank=True, max_length=100)
     habitantes = models.IntegerField(blank=True, null=True)
     metropole = models.BooleanField(default=False)
+
+class Arquivo(models.Model):
+    nome = models.CharField(blank=True, max_length=100)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    pdf = models.FileField(upload_to='pdf')

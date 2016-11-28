@@ -153,3 +153,6 @@ BOWER_INSTALLED_APPS = (
     'jquery#3.1.1 ',
     'bootstrap#3.3.7',
 )
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

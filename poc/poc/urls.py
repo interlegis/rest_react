@@ -16,6 +16,8 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.views.generic import TemplateView
+from django.conf.urls.static import static
+from django.conf import settings
 from rest_framework import routers
 from react_drf  import views
 from react_drf.views  import UserViewVSet,LocalViewSet
@@ -26,10 +28,12 @@ router.register(r'local', LocalViewSet, base_name='local')
 router.register(r'produtos', views.ProdutosViewSet)
 router.register(r'fornecedores', views.FornecedoresViewSet)
 router.register(r'users', UserViewVSet)
+router.register(r'arquivo', views.ArquivoViewSet)
+
 
 urlpatterns = [
     url(r'^api/', include(router.urls)),
     url(r'^index', TemplateView.as_view(template_name='index.html')),
     url(r'^api-token-auth/',obtain_auth_token),
     url(r'^admin/', admin.site.urls),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

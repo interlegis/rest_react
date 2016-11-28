@@ -2,6 +2,7 @@ from rest_framework import viewsets, response, permissions, authentication, stat
 from rest_framework.decorators import detail_route, list_route
 from django.contrib.auth.models import User
 from django.shortcuts import render
+import datetime
 from .models import *
 from .serializers import *
 # Create your views here.
@@ -15,6 +16,25 @@ class FornecedoresViewSet(viewsets.ModelViewSet):
     queryset = Fornecedores.objects.all()
     serializer_class = FornecedoresSerializer
     permission_classes = (permissions.IsAuthenticated,)
+
+class ArquivoViewSet(viewsets.ModelViewSet):
+    queryset = Arquivo.objects.all()
+    serializer_class = ArquivoSerializer
+
+    def post(self, request, format=None):
+        serializer = self.get_serializer(data=request.data,file=request.FILES)
+        if serializer.is_valid():
+            serializer.save()
+            return response.Response(status=status.HTTP_200_CREATED)
+        else:
+            return response.Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
+
+    def list(self, request):
+        serializer = self.get_serializer(Arquivo.objects.order_by('uploaded_at'), many=True)
+        return response.Response(serializer.data)
+
+    # permission_classes = (permissions.IsAuthenticated,)
 
 class UserViewVSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -39,7 +59,6 @@ class LocalViewSet(viewsets.ModelViewSet):
     def post(self, request,pk=None):
         # import ipdb; ipdb.set_trace()
         serializer = self.get_serializer(data=request.data)
-        print(request.data)
         if serializer.is_valid():
             serializer.save()
             return response.Response(status=status.HTTP_201_CREATED)

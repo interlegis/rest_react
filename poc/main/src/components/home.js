@@ -1,12 +1,10 @@
-//index.jsx
-
 import React, { Component, PropTypes } from 'react';
 import { AuthorizedComponent } from 'react-router-role-authorization';
 import { logout } from '../containers/auth';
 import Cookies from 'js-cookie';
 import $ from 'jquery';
 
-export default class Home extends  Component{
+export default class Home extends Component{
     static contextTypes =  {
       router: PropTypes.object.isRequired
     };
