@@ -10,6 +10,8 @@ export const LOCAL_POST = 'LOCAL_POST';
 export const LOCAL_GET = 'LOCAL_GET';
 export const POST_PDF = 'POST_PDF';
 export const GET_PDF = 'GET_PDF';
+export const ERROR_GET_PDF_RESPONSE = 'ERROR_GET_PDF_RESPONSE';
+export const ERROR_GET_PDF_SERVER = 'ERROR_GET_PDF_SERVER';
 
 const config = {
   headers: {
@@ -77,10 +79,9 @@ export function postPdf(props) {
 }
 
 export function getPdf() {
-  const request = axios.get('/api/arquivo/',config);
+  const request = axios.get('/api/arquivo/',config)
   return{
      type: GET_PDF,
      payload: request
    };
-
 }
