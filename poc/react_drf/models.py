@@ -21,3 +21,4 @@ class Arquivo(models.Model):
     nome = models.CharField(blank=True, max_length=100)
     uploaded_at = models.DateTimeField(auto_now_add=True)
     pdf = models.FileField(upload_to='pdf')
+    content = models.TextField(blank=True)

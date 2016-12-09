@@ -29,6 +29,7 @@ router.register(r'produtos', views.ProdutosViewSet)
 router.register(r'fornecedores', views.FornecedoresViewSet)
 router.register(r'users', UserViewVSet)
 router.register(r'arquivo', views.ArquivoViewSet)
+router.register(r'search', views.ArquivoSearchView, base_name='arquivo_search')
 
 
 urlpatterns = [
